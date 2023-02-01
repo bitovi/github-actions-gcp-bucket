@@ -6,6 +6,6 @@
 resource "google_storage_bucket_object" "default" {
   name         = var.file_name
   source       = var.file_source
-  content_type = "text/plain"
+  content_type = "text/html"
   bucket       = google_storage_bucket.default.id
 }
