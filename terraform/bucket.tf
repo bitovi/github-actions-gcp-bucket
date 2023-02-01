@@ -4,7 +4,7 @@ resource "random_id" "bucket_prefix" {
 
 resource "google_storage_bucket" "default" {
   project       = var.GCP_PROJECT_ID
-  name          = "${random_id.bucket_prefix.hex}-bucket-staticSite"
+  name          = "${random_id.bucket_prefix.hex}-bucket-static-site"
   force_destroy = true
   location      = "US"
   storage_class = "STANDARD"
