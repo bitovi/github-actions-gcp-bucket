@@ -1,3 +1,5 @@
 .terraform*
 .terraform.lock*
 terraform.tfstate*
+*.tfvars
+*.html

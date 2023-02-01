@@ -4,8 +4,8 @@ resource "random_id" "bucket_prefix" {
 
 resource "google_storage_bucket" "default" {
   project       = var.GCP_PROJECT_ID
-  name          = "${random_id.bucket_prefix.hex}-bucket-tfstate"
-  force_destroy = false
+  name          = "${random_id.bucket_prefix.hex}-bucket-staticSite"
+  force_destroy = true
   location      = "US"
   storage_class = "STANDARD"
   versioning {
@@ -13,10 +13,10 @@ resource "google_storage_bucket" "default" {
   }
 }
 
-# # Make bucket public
-# resource "google_storage_bucket_iam_member" "member" {
-#   provider = google-beta
-#   bucket   = google_storage_bucket.default.name
-#   role     = "roles/storage.objectViewer"
-#   member   = "allUsers"
-# }
+# Make bucket public
+resource "google_storage_bucket_iam_member" "member" {
+  provider = google-beta
+  bucket   = google_storage_bucket.default.name
+  role     = "roles/storage.objectViewer"
+  member   = "allUsers"
+}
