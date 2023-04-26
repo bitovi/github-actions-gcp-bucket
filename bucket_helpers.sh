@@ -3,10 +3,11 @@
 
 function create_bucket() {
   # creates a PUBLICLY ACCESSABLE bucket
-  bucket=$1
+  local bucket=$1
 
   # create the bucket
   gcloud storage buckets create gs://$bucket --no-public-access-prevention
+  
   if [[ $? != 0 ]]; then
     echo "failed: create_bucket"
     exit
@@ -46,13 +47,13 @@ function upload_files() {
 function delete_buckets() {
   # deletes one or more buckets at once
   # takes the input as an array
-  bucket_list=( "$@" )
+  local bucket_list=( "$@" )
 
-  BUCKET_URL_STRING=
+  local BUCKET_URL_STRING=
 
   # create a list of bucket URLs
   for b in "${bucket_list[@]}"; do
-    BUCKETNAME="gs://$b"
+    local BUCKETNAME="gs://$b"
     BUCKET_URL_STRING+="$BUCKETNAME "
   done
 
@@ -60,5 +61,6 @@ function delete_buckets() {
   BUCKET_URL_STRING="${BUCKET_URL_STRING%% }"
 
   # this deletes the entire contents of the bucket, then the bucket itself
+  # using a list enables multiple deletes in one call
   eval "gcloud storage rm -r $BUCKET_URL_STRING"
 }

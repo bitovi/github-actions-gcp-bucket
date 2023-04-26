@@ -15,3 +15,4 @@ fi
 # engage!
 upload_files $BUCKET_NAME $FILE_LIST
 
+#TODO: print public URL of uploaded file(s)
