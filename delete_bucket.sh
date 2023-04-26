@@ -4,6 +4,4 @@
 source "./.env"
 source "./bucket_helpers.sh"
 
-create_bucket $BUCKET_NAME
-
-
+delete_buckets $BUCKET_NAME

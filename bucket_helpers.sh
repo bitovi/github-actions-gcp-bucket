@@ -2,31 +2,63 @@
 # shellcheck disable=SC1091,SC2086
 
 function create_bucket() {
-  bucket_name=$1
+  # creates a PUBLICLY ACCESSABLE bucket
+  bucket=$1
 
-  gcloud storage buckets create gs://$bucket_name --no-public-access-prevention --uniform-bucket-level-access
-
+  # create the bucket
+  gcloud storage buckets create gs://$bucket --no-public-access-prevention
   if [[ $? != 0 ]]; then
     echo "failed: create_bucket"
-  else
-    echo "done"
+    exit
+  fi
+
+  # make it publicly accessable
+  gcloud storage buckets add-iam-policy-binding gs://$bucket \
+    --member=allUsers \
+    --role=roles/storage.objectViewer \
+    --no-user-output-enabled
+
+  if [[ $? != 0 ]]; then
+    echo "failed: add-iam-policy-binding"
   fi
 }
 
 function list_buckets() {
-  gcloud storage buckets list | yq .name
+  # outputs a json object
+  gcloud storage buckets list --format="json(name)"
+}
+
+function get_bucket_list() {
+  # returns a list with the output
+  local bucket_list=($(list_buckets | jq -r ".[].name"))
+  printf '%s\n' "${bucket_list[@]}"
 }
 
 function upload_files() {
-  files=$1
+  # upload one or more files to a bucket
+  #TODO: support lists of files
+  local bucket_name=$1
+  local files=$2
 
-  gcloud storage cp $files
+  gcloud storage cp $files gs://$bucket_name
 }
 
-function delete_bucket() {
-  #TODO: support a list
-  # gcloud storage buckets delete gs://my-bucket gs://my-other-bucket
-  bucket_name=$1
+function delete_buckets() {
+  # deletes one or more buckets at once
+  # takes the input as an array
+  bucket_list=( "$@" )
 
-  gcloud storage buckets delete gs://$bucket_name
+  BUCKET_URL_STRING=
+
+  # create a list of bucket URLs
+  for b in "${bucket_list[@]}"; do
+    BUCKETNAME="gs://$b"
+    BUCKET_URL_STRING+="$BUCKETNAME "
+  done
+
+  # trim the trailing space
+  BUCKET_URL_STRING="${BUCKET_URL_STRING%% }"
+
+  # this deletes the entire contents of the bucket, then the bucket itself
+  eval "gcloud storage rm -r $BUCKET_URL_STRING"
 }
