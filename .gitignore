@@ -4,3 +4,5 @@ terraform.tfstate*
 *.tfvars
 *.html
 .env
+gcp-action
+*pycache*
