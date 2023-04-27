@@ -8,13 +8,12 @@
 # Imports the Google Cloud client library
 from google.cloud import storage
 
+# Instantiates a client
+storage_client = storage.Client()
 
 def create_bucket(bucketNames):
   """Creates one or more buckets in GCP Storage."""
-  
-  # Instantiates a client
-  storage_client = storage.Client()
-  
+
   # convert bucket_names to a list if it's a single string
   if isinstance(bucketNames, str):
     bucketNames = [bucketNames]
@@ -40,15 +39,12 @@ def get_buckets():
   """Returns a list of bucket names."""
   
   bucket_names = []
-  for bucket in storage.Client().list_buckets():
-      bucket_names.append(bucket.name)
+  for bucket in storage_client.list_buckets():
+    bucket_names.append(bucket.name)
   return bucket_names
 
 def delete_bucket(bucketNames):
   """Deletes one or more buckets."""
-
-  # create a client object
-  storage_client = storage.Client()
   
   # if a string is passed in, convert to array
   if isinstance(bucketNames, str):
@@ -71,11 +67,28 @@ def upload_file(bucket_name, source_file_name):
   file_list = []
   for file in files:
     file_list.append(file)
-  
-  storage_client = storage.Client()
+    
   bucket = storage_client.bucket(bucket_name)
   
   for file in file_list:
     blob = bucket.blob(file)
     blob.upload_from_filename(file)
     print(f"File {file} uploaded to {bucket_name}/{file}.")
+
+
+def bucket_metadata(bucket_name):
+  """returns a bucket's metadata."""
+  bucket = storage_client.get_bucket(bucket_name)
+  return bucket
+
+
+def file_metadata(bucket_name, file_name):
+  """Prints out a blob's metadata."""
+
+  bucket = storage_client.bucket(bucket_name)
+  blobs  = storage_client.list_blobs(bucket_name)
+  
+  for blob in blobs:
+    print(blob.name)
+    blobMetadata = bucket.get_blob(blob.name)
+    print(f"{blobMetadata.media_link}")
