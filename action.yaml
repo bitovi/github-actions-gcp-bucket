@@ -1,0 +1,72 @@
+name: 'Deploy Static Files to GCP Storage'
+description: 'Creates a storage bucket in GCP and uploads files to it.'
+branding:
+  icon: upload-cloud
+  color: red
+inputs:
+  checkout:
+    description:  'Specifies if this action should checkout the code'
+    required: false
+    default: 'true'
+  bucket_name:
+    description: 'GCP Storage bucket to use. Defaults to `${org}-${repo}-{branch}-bucket`'
+    required: false
+  file_name:
+    description: 'The name of the file(s) to upload to the bucket. Wildcards supported. Duplicate Files will be overwritten.'
+    required: true
+
+  # GCP
+  # Create a GitHub Secret named 'GOOGLE_CREDENTIALS' with the contents being an exported Google Cloud Service Account Key JSON.
+  gcp_access_key:
+    description: 'GCP Service Account Key SON'
+    required: true
+
+  dot_env:
+    description: '`.env` file to be used with the app from Github secrets'
+    required: false
+  ghv_env:
+    description: '`.env` file to be used with the app from Github variables'
+    required: false
+  
+  bucket_destroy:
+    description: 'Set to any value to Destroy the bucket and all child files.'
+    required: false
+
+  file_destroy:
+    description: 'Set to any value to delete the files but leave the bucket.'
+    required: false
+
+outputs:
+  bucket_url:
+    description: "The URL of the bucket."
+    value: ${{ steps.deploy.outputs.bucket_url }}
+  file_url:
+    description: "The URL of the file(s) uploaded."
+    value: ${{ steps.deploy.outputs.file_url }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Checkout if required'
+      if: ${{ inputs.checkout == 'true' }}
+      uses: actions/checkout@v3
+
+    - name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
+
+    - name: 'Deploy the File'
+      id: deploy
+      shell: bash
+      env:
+        BUCKET_NAME: ${{ inputs.bucket_name }}
+        FILE_NAME: ${{ inputs.file_name }}
+        BUCKET_DESTROY: ${{ inputs.bucket_destroy }}
+        FILE_DESTROY: ${{ inputs.file_DESTROY }}
+      
+      run: |
+        
+
+
+
