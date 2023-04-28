@@ -68,4 +68,6 @@ runs:
       run: |
         echo 'hi!'
         cd $GITHUB_ACTION_PATH
+        pwd
+        ls
         source scripts/upload_file.sh
