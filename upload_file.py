@@ -9,7 +9,7 @@ load_dotenv()
 
 # set the vars
 bucket_name = getenv("BUCKET_NAME")
-file_name = getenv("FILE_LIST")
+file_name = getenv("FILE_NAME")
 
 # get list of existing buckets
 bucket_list = bucket_helpers.get_buckets()

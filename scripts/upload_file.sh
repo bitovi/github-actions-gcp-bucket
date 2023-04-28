@@ -15,6 +15,6 @@ if [[ ! " ${bucketList[*]} " =~ " $BUCKET_NAME "  ]]; then
 fi
 
 # engage!
-upload_files $BUCKET_NAME $FILE_LIST
+upload_files $BUCKET_NAME $FILE_NAME
 
 #TODO: print public URL of uploaded file(s)
