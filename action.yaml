@@ -61,14 +61,6 @@ runs:
       with:
         version: '>= 363.0.0'
 
-    - name: rest
-      shell: bash
-      run: 'echo "gcloud installed"'
-
-    - name: 'Use gcloud CLI'
-      shell: bash
-      run: 'gcloud info'
-
     - name: 'Deploy the File'
       id: deploy
       shell: bash
@@ -79,9 +71,8 @@ runs:
         FILE_DESTROY: ${{ inputs.file_destroy }}
       
       run: |
+        set -x
         echo 'uploading your file!'
-        pwd
-        ls
         cd "$GITHUB_ACTION_PATH/scripts"
         ./upload_file.sh
 
