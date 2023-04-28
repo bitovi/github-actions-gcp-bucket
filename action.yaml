@@ -80,6 +80,8 @@ runs:
       
       run: |
         echo 'uploading your file!'
-        cd scripts
+        pwd
+        ls
+        cd "$GITHUB_ACTION_PATH/scripts"
         ./upload_file.sh
 
