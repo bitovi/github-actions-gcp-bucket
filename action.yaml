@@ -79,7 +79,7 @@ runs:
       id: summary
       shell: bash
       env:
-        FILE_URL: ${{ outputs.FILE_URL }}
+        FILE_URL: ${{ steps.deploy.outputs.FILE_URL }}
 
       run: |
         echo "### Your file was uploaded! 🎉" >> $GITHUB_STEP_SUMMARY
