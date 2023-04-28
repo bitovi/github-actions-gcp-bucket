@@ -72,7 +72,8 @@ runs:
       
       run: |
         echo 'uploading your file!'
-        source $GITHUB_ACTION_PATH/scripts/upload_file.sh
+        url=$($GITHUB_ACTION_PATH/scripts/upload_file.sh)
+        echo "FILE_URL=$url" >> $GITHUB_OUTPUT
 
     - name: 'Print Summary'
       id: summary
