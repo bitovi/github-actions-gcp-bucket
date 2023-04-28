@@ -29,12 +29,13 @@ inputs:
     required: false
   
   bucket_destroy:
-    description: 'Set to any value to Destroy the bucket and all child files.'
+    description: "Set to 'true' to Destroy the bucket and all child files."
+    default: 'false'
     required: false
 
-  file_destroy:
-    description: 'Set to any value to delete the files but leave the bucket.'
-    required: false
+  # file_destroy:
+  #   description: 'Set to any value to delete the files but leave the bucket.'
+  #   required: false
 
 outputs:
   # bucket_url:
@@ -42,16 +43,11 @@ outputs:
   #   value: ${{ steps.deploy.outputs.bucket_url }}
   file_url:
     description: "The URL of the file(s) uploaded."
-    value: ${{ steps.deploy.outputs.FILE_URL}}
+    value: ${{ steps.deploy.outputs.FILE_URL }}
 
 runs:
   using: 'composite'
   steps:
-    - name: 'check gc'
-      id: check-gc
-      shell: bash
-      run: 'gcloud version'
-
     - name: 'Checkout if required'
       if: ${{ inputs.checkout == 'true' }}
       uses: actions/checkout@v3
@@ -61,27 +57,33 @@ runs:
       with:
         credentials_json: ${{ inputs.gcp_access_key }}
 
-    # - name: 'Set up Cloud SDK'
-    #   uses: google-github-actions/setup-gcloud@v1
-    #   with:
-    #     version: '>= 363.0.0'
-
-    - name: 'Deploy the File'
+    - if: inputs.bucket_destroy != 'true'
+      name: 'Deploy the File'
       id: deploy
       shell: bash
       env:
         BUCKET_NAME: ${{ inputs.bucket_name }}
         FILE_NAME: ${{ inputs.file_name }}
-        BUCKET_DESTROY: ${{ inputs.bucket_destroy }}
-        FILE_DESTROY: ${{ inputs.file_destroy }}
       
       run: |
-        echo 'uploading your file!'
+        echo 'Uploading your file!'
         url=$($GITHUB_ACTION_PATH/scripts/upload_file.sh)
         echo "FILE_URL=$url" >> $GITHUB_OUTPUT
 
-    - name: 'Print Summary'
-      id: summary
+    - if: inputs.bucket_destroy == 'true'
+      name: 'Destroy The Bucket'
+      id: destroy
+      shell: bash
+      env:
+        BUCKET_NAME: ${{ inputs.bucket_name }}
+      
+      run: |
+        echo 'Destroying your bucket!'
+        $GITHUB_ACTION_PATH/scripts/delete_bucket.sh
+
+    - if: inputs.bucket_destroy != 'true'
+      name: 'Print Summary'
+      id: summary_created
       shell: bash
       env:
         FILE_URL: ${{ steps.deploy.outputs.FILE_URL }}
@@ -90,3 +92,11 @@ runs:
         echo "### Your file was uploaded! :tada:" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "Your file's URL: $FILE_URL" >> $GITHUB_STEP_SUMMARY
+
+    - if: inputs.bucket_destroy == 'true'
+      name: 'Print Summary'
+      id: summary_destroyed
+      shell: bash
+
+      run: |
+        echo "### Your bucket '${{ inputs.bucket_name }} was _detroyed_! :bomb:" >> $GITHUB_STEP_SUMMARY

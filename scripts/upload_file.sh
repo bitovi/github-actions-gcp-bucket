@@ -9,6 +9,7 @@ bucketList=($(get_bucket_list))
 
 # create the bucket if it doesn't exist
 if [[ ! " ${bucketList[*]} " =~ " $BUCKET_NAME "  ]]; then
+  echo "Creating Bucket: $BUCKET_NAME"
   create_bucket $BUCKET_NAME
 fi
 
