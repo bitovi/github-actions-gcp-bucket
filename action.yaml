@@ -69,15 +69,17 @@ runs:
       shell: bash
       run: 'gcloud info'
 
-    # - name: 'Deploy the File'
-    #   id: deploy
-    #   shell: bash
-    #   env:
-    #     BUCKET_NAME: ${{ inputs.bucket_name }}
-    #     FILE_NAME: ${{ inputs.file_name }}
-    #     BUCKET_DESTROY: ${{ inputs.bucket_destroy }}
-    #     FILE_DESTROY: ${{ inputs.file_destroy }}
+    - name: 'Deploy the File'
+      id: deploy
+      shell: bash
+      env:
+        BUCKET_NAME: ${{ inputs.bucket_name }}
+        FILE_NAME: ${{ inputs.file_name }}
+        BUCKET_DESTROY: ${{ inputs.bucket_destroy }}
+        FILE_DESTROY: ${{ inputs.file_destroy }}
       
-    #   run: |
-    #     echo 'hi!'
+      run: |
+        echo 'uploading your file!'
+        cd scripts
+        ./upload_file.sh
 
