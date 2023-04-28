@@ -61,6 +61,10 @@ runs:
       with:
         version: '>= 363.0.0'
 
+    - name: rest
+      shell: bash
+      run: 'echo "gcloud installed"'
+
     - name: 'Use gcloud CLI'
       shell: bash
       run: 'gcloud info'
