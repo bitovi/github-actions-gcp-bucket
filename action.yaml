@@ -67,6 +67,5 @@ runs:
       
       run: |
         echo 'hi!'
-        pwd
-        ls -a   
-        source $GITHUB_ACTION_PATH/scripts/upload_file.sh
+        cd $GITHUB_ACTION_PATH
+        source scripts/upload_file.sh
