@@ -37,12 +37,12 @@ inputs:
     required: false
 
 outputs:
-  bucket_url:
-    description: "The URL of the bucket."
-    value: ${{ steps.deploy.outputs.bucket_url }}
+  # bucket_url:
+  #   description: "The URL of the bucket."
+  #   value: ${{ steps.deploy.outputs.bucket_url }}
   file_url:
     description: "The URL of the file(s) uploaded."
-    value: ${{ steps.deploy.outputs.file_url }}
+    value: ${{ steps.deploy.outputs.FILE_URL}}
 
 runs:
   using: 'composite'
@@ -75,3 +75,13 @@ runs:
         echo 'uploading your file!'
         source $GITHUB_ACTION_PATH/scripts/upload_file.sh
 
+    - name: 'Print Summary'
+      id: summary
+      shell: bash
+      env:
+        FILE_URL: ${{ outputs.FILE_URL }}
+
+      run: |
+        echo "### Your file was uploaded! 🎉" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "Your file's URL: $FILE_URL"

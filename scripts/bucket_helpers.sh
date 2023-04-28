@@ -64,3 +64,31 @@ function delete_buckets() {
   # using a list enables multiple deletes in one call
   eval "gcloud storage rm -r $BUCKET_URL_STRING"
 }
+
+function get_file_metadata() {
+  # returns a yaml string of the whole metadata
+  local bucket_name=$1
+  local file_name=$2
+
+  local file_metadata
+  file_metadata=$(gcloud storage objects describe gs://$bucket_name/$file_name)
+
+  echo $file_metadata
+}
+
+function get_file_public_url() {
+  # returns the composed public url
+  GOOGLE_BUCKET_PREFIX='https://storage.googleapis.com/'
+
+  local bucket_name=$1
+  local file_name=${2:-} # file name or null
+  local file_yaml
+  local file_url
+  
+  file_yaml=$(get_object_metadata $bucket_name $file_name)
+  file_url=$(echo $file_yaml | yq "\"$GOOGLE_BUCKET_PREFIX\" + .bucket + \"/\" + .name")
+
+  echo $file_url
+}
+
+

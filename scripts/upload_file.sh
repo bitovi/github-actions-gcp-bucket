@@ -18,3 +18,7 @@ fi
 upload_files $BUCKET_NAME $FILE_NAME
 
 #TODO: print public URL of uploaded file(s)
+file_url=$(get_file_public_url $BUCKET_NAME $FILE_NAME)
+
+# set the output
+echo "FILE_URL=$file_url" >> $GITHUB_OUTPUT
