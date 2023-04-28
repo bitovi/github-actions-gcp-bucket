@@ -4,7 +4,7 @@
 set -x
 
 # source "./.env"
-source "bucket_helpers.sh"
+source $GITHUB_ACTION_PATH/scripts/bucket_helpers.sh
 
 # create an array of existing buckets
 bucketList=($(get_bucket_list))

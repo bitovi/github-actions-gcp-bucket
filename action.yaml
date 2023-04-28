@@ -73,6 +73,5 @@ runs:
       run: |
         set -x
         echo 'uploading your file!'
-        cd "$GITHUB_ACTION_PATH/scripts"
-        ./upload_file.sh
+        source $GITHUB_ACTION_PATH/scripts/upload_file.sh
 
