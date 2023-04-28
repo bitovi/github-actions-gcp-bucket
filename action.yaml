@@ -67,4 +67,6 @@ runs:
       
       run: |
         echo 'hi!'
+        pwd
+        ls -a   
         source scripts/upload_file.sh
