@@ -85,7 +85,7 @@ function get_file_public_url() {
   local file_yaml
   local file_url
   
-  file_yaml=$(get_object_metadata $bucket_name $file_name)
+  file_yaml=$(get_file_metadata $bucket_name $file_name)
   file_url=$(echo $file_yaml | yq "\"$GOOGLE_BUCKET_PREFIX\" + .bucket + \"/\" + .name")
 
   echo $file_url
