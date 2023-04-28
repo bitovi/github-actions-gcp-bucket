@@ -2,7 +2,7 @@
 # shellcheck disable=SC1091,SC2086
 
 # source "./.env"
-source "./bucket_helpers.sh"
+source "bucket_helpers.sh"
 
 # create an array of existing buckets
 bucketList=($(get_bucket_list))
