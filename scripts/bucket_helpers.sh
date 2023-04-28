@@ -78,17 +78,15 @@ function get_file_metadata() {
 
 function get_file_public_url() {
   # returns the composed public url
-  GOOGLE_BUCKET_PREFIX='https://storage.googleapis.com/'
+  GOOGLE_BUCKET_PREFIX='https://storage.googleapis.com'
 
   local bucket_name=$1
-  local file_name=${2:-} # file name or null
-  local file_yaml
+  local file_name=$2
+  # local file_yaml
   local file_url
   
-  file_yaml=$(get_file_metadata $bucket_name $file_name)
-  file_url=$(echo $file_yaml | yq "\"$GOOGLE_BUCKET_PREFIX\" + .bucket + \"/\" + .name")
-
+  # file_yaml=$(get_file_metadata $bucket_name $file_name)
+  # file_url=$(echo $file_yaml | yq "\"$GOOGLE_BUCKET_PREFIX\" + .bucket + \"/\" + .name")
+  file_url="$GOOGLE_BUCKET_PREFIX/$bucket_name/$file_name"
   echo $file_url
 }
-
-
