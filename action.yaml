@@ -66,7 +66,8 @@ runs:
         FILE_DESTROY: ${{ inputs.file_DESTROY }}
       
       run: |
-        
+        echo 'hi!'
+
 
 
 
