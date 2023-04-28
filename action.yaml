@@ -67,8 +67,4 @@ runs:
       
       run: |
         echo 'hi!'
-        source upload_file.sh
-
-
-
-
+        source scripts/upload_file.sh
