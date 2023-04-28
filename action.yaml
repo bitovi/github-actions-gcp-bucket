@@ -52,42 +52,41 @@ runs:
       shell: bash
       run: 'gcloud version'
 
-    # - name: 'Checkout if required'
-    #   if: ${{ inputs.checkout == 'true' }}
-    #   uses: actions/checkout@v3
+    - name: 'Checkout if required'
+      if: ${{ inputs.checkout == 'true' }}
+      uses: actions/checkout@v3
 
-    # - name: 'Authenticate to Google Cloud'
-    #   uses: google-github-actions/auth@v1
-    #   with:
-    #     credentials_json: ${{ inputs.gcp_access_key }}
-
+    - name: 'Authenticate to Google Cloud'
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: ${{ inputs.gcp_access_key }}
 
     # - name: 'Set up Cloud SDK'
     #   uses: google-github-actions/setup-gcloud@v1
     #   with:
     #     version: '>= 363.0.0'
 
-    # - name: 'Deploy the File'
-    #   id: deploy
-    #   shell: bash
-    #   env:
-    #     BUCKET_NAME: ${{ inputs.bucket_name }}
-    #     FILE_NAME: ${{ inputs.file_name }}
-    #     BUCKET_DESTROY: ${{ inputs.bucket_destroy }}
-    #     FILE_DESTROY: ${{ inputs.file_destroy }}
+    - name: 'Deploy the File'
+      id: deploy
+      shell: bash
+      env:
+        BUCKET_NAME: ${{ inputs.bucket_name }}
+        FILE_NAME: ${{ inputs.file_name }}
+        BUCKET_DESTROY: ${{ inputs.bucket_destroy }}
+        FILE_DESTROY: ${{ inputs.file_destroy }}
       
-    #   run: |
-    #     echo 'uploading your file!'
-    #     url=$($GITHUB_ACTION_PATH/scripts/upload_file.sh)
-    #     echo "FILE_URL=$url" >> $GITHUB_OUTPUT
+      run: |
+        echo 'uploading your file!'
+        url=$($GITHUB_ACTION_PATH/scripts/upload_file.sh)
+        echo "FILE_URL=$url" >> $GITHUB_OUTPUT
 
-    # - name: 'Print Summary'
-    #   id: summary
-    #   shell: bash
-    #   env:
-    #     FILE_URL: ${{ steps.deploy.outputs.FILE_URL }}
+    - name: 'Print Summary'
+      id: summary
+      shell: bash
+      env:
+        FILE_URL: ${{ steps.deploy.outputs.FILE_URL }}
 
-    #   run: |
-    #     echo "### Your file was uploaded! :tada:" >> $GITHUB_STEP_SUMMARY
-    #     echo "" >> $GITHUB_STEP_SUMMARY
-    #     echo "Your file's URL: $FILE_URL" >> $GITHUB_STEP_SUMMARY
+      run: |
+        echo "### Your file was uploaded! :tada:" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "Your file's URL: $FILE_URL" >> $GITHUB_STEP_SUMMARY
