@@ -94,9 +94,9 @@ runs:
         echo "Your file's URL: $FILE_URL" >> $GITHUB_STEP_SUMMARY
 
     - if: inputs.bucket_destroy == 'true'
-      name: 'Print Summary'
+      name: 'Print Summary_destroyed'
       id: summary_destroyed
       shell: bash
 
       run: |
-        echo "### Your bucket '${{ inputs.bucket_name }} was _detroyed_! :bomb:" >> $GITHUB_STEP_SUMMARY
+        echo "### Your bucket '${{ inputs.bucket_name }}'' was _destroyed_! :bomb:" >> $GITHUB_STEP_SUMMARY
