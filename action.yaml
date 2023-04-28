@@ -68,6 +68,5 @@ runs:
       run: |
         echo 'hi!'
         cd $GITHUB_ACTION_PATH/scripts
-        pwd
-        ls
+        source install_gcloud.sh
         source upload_file.sh
