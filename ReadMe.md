@@ -19,8 +19,8 @@ To install this Action, ceate a workflow in your repos's `.github/workflows` fol
 You must set three environment variables/secrets:
 
 - `GOOGLE_CREDENTIALS`: set as a `secret`. This is the JSON file exported as a credential from your Google Cloud account.
-- `BUCKET_NAME`: set as a `variable` 
-- `FILE_NAME`: set as a `variable`. Supports wildcards.
+- `BUCKET_NAME`: set as a `variable`, or set statically in your workflow file.
+- `FILE_NAME`: set as a `variable`, or set statically in your workflow file. Supports wildcards.
 
 ```sh
 name: GCP Bucket Deploy
