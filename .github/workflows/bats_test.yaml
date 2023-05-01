@@ -4,11 +4,10 @@ on: push
 jobs:
   Bats-Test:
     runs-on: 'ubuntu-latest'
-    permissions:
-      contents: 'read'
-      id-token: 'write'
+    
     steps:
       - uses: actions/checkout@v3
+        name: Checkout
 
       - id: 'auth'
         name: 'Authenticate to Google Cloud'
@@ -17,9 +16,7 @@ jobs:
           credentials_json: ${{ secrets.GOOGLE_CREDENTIALS }}
 
       - name: Setup BATS
-        uses: mig4/setup-bats@v1.2.0
-        with:
-          bats-version: 1.9.0
+        run: npm install -g bats
 
-      - name: test
+      - name: Run The Tests
         run: cd scripts && bats *
