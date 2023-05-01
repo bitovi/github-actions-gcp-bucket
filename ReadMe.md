@@ -33,7 +33,7 @@ jobs:
     runs-on: 'ubuntu-latest'
     steps:
       - id: 'deploy'
-        uses: 'bitovi/github-actions-gcp-bucket@DEVOPS-636-cli-method'
+        uses: 'bitovi/github-actions-gcp-bucket'
         with:
           gcp_access_key: ${{ secrets.GOOGLE_CREDENTIALS }}
           bucket_name: ${{ vars.BUCKET_NAME }}
