@@ -4,7 +4,7 @@ on: push
 jobs:
   Bats-Test:
     runs-on: 'ubuntu-latest'
-    
+
     steps:
       - uses: actions/checkout@v3
         name: Checkout
@@ -19,4 +19,12 @@ jobs:
         run: npm install -g bats
 
       - name: Run The Tests
-        run: cd scripts && bats *
+        run: cd scripts && bats . --timing --report-formatter junit && cp report.xml ../
+
+      - name: Test Report
+        uses: dorny/test-reporter@v1
+        if: success() || failure()    # run this step even if previous step failed
+        with:
+          name: JUNIT Tests            # Name of the check run which will be created
+          path: report.xml  # Path to test results
+          reporter: junit        # Format of test results
