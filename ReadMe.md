@@ -1,6 +1,8 @@
+[![Unit Test](https://github.com/bitovi/github-actions-gcp-bucket/actions/workflows/bats_test.yaml/badge.svg?branch=main)](https://github.com/bitovi/github-actions-gcp-bucket/actions/workflows/bats_test.yaml)
+
 # GitHub Action: Upload To Public GCP Bucket
 
-This Action will upload files from your repo directly into a Google Storage Bucket. 
+This Action will upload files from your repo directly into a Google Storage Bucket.
 
 **By default, this bucket and all the files in it are public to the internet.**
 
@@ -47,3 +49,5 @@ jobs:
 1. toggle destructive/non-destructive (no-clobber) uploads
 1. default folder name (using existing folder name mechanism)
 1. Support non-public creation
+
+<!-- markdownlint-disable-file MD041 -->
