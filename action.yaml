@@ -1,0 +1,103 @@
+name: 'Deploy Static Files to GCP Storage'
+description: 'Creates a storage bucket in GCP and uploads files to it.'
+branding:
+  icon: upload-cloud
+  color: red
+inputs:
+  checkout:
+    description:  'Specifies if this action should checkout the code'
+    required: false
+    default: 'true'
+  bucket_name:
+    description: 'GCP Storage bucket to use. Defaults to `${org}-${repo}-{branch}-bucket`'
+    required: false
+  file_name:
+    description: 'The name of the file(s) to upload to the bucket. Wildcards supported. Duplicate Files will be overwritten.'
+    required: true
+
+  # GCP
+  # Create a GitHub Secret named 'GOOGLE_CREDENTIALS' with the contents being an exported Google Cloud Service Account Key JSON.
+  gcp_access_key:
+    description: 'GCP Service Account Key JSON set as GOOGLE_CREDENTIALS secret.'
+    required: true
+
+  dot_env:
+    description: '`.env` file to be used with the app from Github secrets'
+    required: false
+  ghv_env:
+    description: '`.env` file to be used with the app from Github variables'
+    required: false
+  
+  bucket_destroy:
+    description: "Set to 'true' to Destroy the bucket and all child files."
+    default: 'false'
+    required: false
+
+  # file_destroy:
+  #   description: 'Set to any value to delete the files but leave the bucket.'
+  #   required: false
+
+outputs:
+  # bucket_url:
+  #   description: "The URL of the bucket."
+  #   value: ${{ steps.deploy.outputs.bucket_url }}
+  file_url:
+    description: "The URL of the file(s) uploaded."
+    value: ${{ steps.deploy.outputs.FILE_URL }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Checkout if required'
+      if: ${{ inputs.checkout == 'true' }}
+      uses: actions/checkout@v3
+
+    - name: 'Authenticate to Google Cloud'
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: ${{ inputs.gcp_access_key }}
+
+    - if: inputs.bucket_destroy != 'true'
+      name: 'Deploy the File'
+      id: deploy
+      shell: bash
+      env:
+        BUCKET_NAME: ${{ inputs.bucket_name }}
+        FILE_NAME: ${{ inputs.file_name }}
+      
+      run: |
+        echo 'Uploading your file!'
+        url=$($GITHUB_ACTION_PATH/scripts/upload_file.sh)
+        echo "FILE_URL='$url'" >> $GITHUB_OUTPUT
+        echo $GITHUB_OUTPUT
+
+    - if: inputs.bucket_destroy == 'true'
+      name: 'Destroy The Bucket'
+      id: destroy
+      shell: bash
+      env:
+        BUCKET_NAME: ${{ inputs.bucket_name }}
+      
+      run: |
+        echo 'Destroying your bucket!'
+        $GITHUB_ACTION_PATH/scripts/delete_bucket.sh
+
+    - if: inputs.bucket_destroy != 'true'
+      name: 'Print Summary'
+      id: summary_created
+      shell: bash
+      env:
+        FILE_URL: ${{ steps.deploy.outputs.FILE_URL }}
+
+      run: |
+        echo "### Your file was uploaded! :tada:" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "Your file's URL: $FILE_URL" >> $GITHUB_STEP_SUMMARY
+
+    - if: inputs.bucket_destroy == 'true'
+      name: 'Print Summary_destroyed'
+      id: summary_destroyed
+      shell: bash
+
+      run: |
+        echo "### Your bucket '${{ inputs.bucket_name }}'' was _destroyed_! :bomb:" >> $GITHUB_STEP_SUMMARY
