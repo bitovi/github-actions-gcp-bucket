@@ -1,5 +1,8 @@
 name: Unit Test
-on: push
+on: 
+  push:
+    paths:
+      - 'scripts/**'
 
 jobs:
   Bats-Test:
