@@ -18,6 +18,23 @@ You can [get help or ask questions on our Discord channel!](https://discord.gg/J
 
 Or, you can hire us for training, consulting, or development. [Set up a free consultation.](https://www.bitovi.com/devops-consulting)
 
+## Flow Diagram
+
+```mermaid
+graph TD
+    Start((Start)) --> Checkout["Checkout<br>actions/checkout@v3"]
+    Checkout --> Authenticate["Authenticate to Google Cloud<br>google-github-actions/auth@v1"]
+    Authenticate --> |inputs.bucket_destroy != True| Deploy((Deploy the File))
+    Deploy --> succeeded{Success}
+    succeeded -->|Yes| Summary((Print Summary))
+    succeeded -->|No| Summary_failed((Print Summary_failed))
+    Authenticate --> |inputs.bucket_destroy == 'true'| Destroy((Destroy The Bucket))
+    Destroy --> succeeded
+    
+    Summary --> End((End))
+    Summary_failed-->End
+```
+
 ## Configuration
 
 ### Create and Upload
@@ -76,7 +93,13 @@ jobs:
 
 The Action will output the URL to the publicly accessable file.
 
-## Usage
+# Usage
+
+## Optional Parameters
+
+|Param|Description|Default|Options|Required|
+|-|-|-|-|-|
+|`no_clobber`|Prevent overwriting the content of existing files|`false`|`false`, `true`|no|
 
 ### Manual Operation
 
