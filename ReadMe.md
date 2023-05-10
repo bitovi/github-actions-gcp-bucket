@@ -132,7 +132,7 @@ This is sometimes referred to as "GitOps", because the actions in GitHub are def
 
 1. enable Google OIDC auth
 1. support folders
-1. toggle destructive/non-destructive (no-clobber) uploads
+1. toggle destructive/non-destructive (no-clobber) uploads  `IN PROGRESS`
 1. default folder name (using existing folder name mechanism)
 1. Support non-public creation
 

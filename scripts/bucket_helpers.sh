@@ -37,11 +37,20 @@ function get_bucket_list() {
 
 function upload_files() {
   # upload one or more files to a bucket
+  # Usage: upload_files $BUCKET_NAME $FILE_NAME $NO_CLOBBER
   #TODO: support lists of files
   local bucket_name=$1
   local files=$2
+  local no_clobber=$3
 
-  gcloud storage cp $files gs://$bucket_name
+  local command="gcloud storage cp $files gs://$bucket_name"
+
+  # going with string comparison here as booleans are not well-defined in both Actions and bash
+  if [[ $no_clobber == 'true' ]]; then
+    command="$command --no-clobber"
+  fi
+
+  eval "$command"
 }
 
 function delete_buckets() {

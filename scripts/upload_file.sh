@@ -1,7 +1,11 @@
 #!/bin/bash
 # shellcheck disable=SC1091,SC2086
 
-# source "./.env"
+# Env Vars from the Action:
+# BUCKET_NAME: ${{ inputs.bucket_name }}
+# FILE_NAME: ${{ inputs.file_name }}
+# NO_CLOBBER: ${{ inputs.no_clobber }}
+
 source $GITHUB_ACTION_PATH/scripts/bucket_helpers.sh
 
 # create an array of existing buckets
@@ -14,7 +18,7 @@ if [[ ! " ${bucketList[*]} " =~ " $BUCKET_NAME "  ]]; then
 fi
 
 # engage!
-upload_files $BUCKET_NAME $FILE_NAME
+upload_files $BUCKET_NAME $FILE_NAME $NO_CLOBBER
 
 #TODO: print public URL of uploaded file(s)
 file_url=$(get_file_public_url $BUCKET_NAME $FILE_NAME)
