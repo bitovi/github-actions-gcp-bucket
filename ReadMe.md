@@ -37,16 +37,17 @@ graph TD
 
 ## Configuration
 
-### Create and Upload
-
-To install this Action, ceate a workflow in your repos's `.github/workflows` folder:
-
 You must set three environment variables/secrets:
 
 - `GOOGLE_CREDENTIALS`: set as a `secret`. This is the JSON file exported as a credential from your Google Cloud account.
 - `BUCKET_NAME`: set as a `variable`, or set statically in your workflow file.
 - `FILE_NAME`: set as a `variable`, or set statically in your workflow file. Supports wildcards.
 
+To install this Action, ceate new workflow files in your repos's `.github/workflows` folder:
+
+### Create and Upload (overwrite)
+
+`.github/workflows/deploy.yaml`
 ```yaml
 name: GCP Bucket Deploy
 on: workflow_dispatch       # set the triggers to your liking
@@ -63,6 +64,29 @@ jobs:
           gcp_access_key: ${{ secrets.GOOGLE_CREDENTIALS }}
           bucket_name: ${{ vars.BUCKET_NAME }}
           file_name: ${{ vars.FILE_NAME }}
+```
+
+### Create and Upload (No Clobber)
+Add the `no_clobber` input to prevent overwriting of existing files. Files that are skipped will be printed to the log and Summary.
+
+`.github/workflows/deploy.yaml`
+```yaml
+name: GCP Bucket Deploy
+on: workflow_dispatch       # set the triggers to your liking
+#   push:
+#     branches: [ main ]
+
+jobs:
+  Bucket-Deploy:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - id: 'deploy'
+        uses: 'bitovi/github-actions-gcp-bucket'
+        with:
+          gcp_access_key: ${{ secrets.GOOGLE_CREDENTIALS }}
+          bucket_name: ${{ vars.BUCKET_NAME }}
+          file_name: ${{ vars.FILE_NAME }}
+          no_clobber: 'true'
 ```
 
 ### Delete The Bucket
@@ -86,7 +110,7 @@ jobs:
         with:
           gcp_access_key: ${{ secrets.GOOGLE_CREDENTIALS }}
           bucket_name: ${{ vars.BUCKET_NAME }}
-          bucket_destroy: true
+          bucket_destroy: 'true'
 ```
 
 ## Output
