@@ -12,7 +12,7 @@ echo 'Uploading your file!'
 result=$($GITHUB_ACTION_PATH/scripts/upload_file.sh)
 
 if [[ $result =~ 'Skipping'  ]]; then
-  echo "DEPLOY_RESULT=$result" >> $GITHUB_OUTPUT
+  echo "DEPLOY_RESULT_CONTENT=$result" >> $GITHUB_OUTPUT
   echo "DEPLOY_STATUS=SKIPPED" >> $GITHUB_OUTPUT
 else
   echo "FILE_URL=$result" >> $GITHUB_OUTPUT

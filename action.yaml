@@ -82,12 +82,13 @@ runs:
       run: $GITHUB_ACTION_PATH/scripts/delete_bucket.sh
 
     # - if: inputs.bucket_destroy != 'true'
-    # summary prints all results now
+    # summary prints all results types
     - name: 'Print Summary'
       id: summary
       shell: bash
       env:
+        BUCKET_NAME: ${{ inputs.bucket_name }}
         FILE_URL: ${{ steps.deploy.outputs.FILE_URL }}
-        DEPLOY_RESULT: ${{ steps.deploy.outputs.DEPLOY_RESULT }}
+        DEPLOY_RESULT_CONTENT: ${{ steps.deploy.outputs.DEPLOY_RESULT_CONTENT }}
         DEPLOY_STATUS: ${{ steps.deploy.outputs.DEPLOY_STATUS }}
       run: $GITHUB_ACTION_PATH/scripts/print_summary.sh
