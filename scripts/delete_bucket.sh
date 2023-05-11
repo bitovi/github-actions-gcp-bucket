@@ -3,4 +3,5 @@
 
 source $GITHUB_ACTION_PATH/scripts/bucket_helpers.sh
 
+echo 'Destroying your bucket!'
 delete_buckets $BUCKET_NAME
