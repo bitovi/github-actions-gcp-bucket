@@ -2,7 +2,7 @@
 # shellcheck disable=SC2086,SC1091
 
 bats_require_minimum_version 1.5.0
-source ./bucket_helpers.sh
+source ../bucket_helpers.sh
 
 
 setup() {

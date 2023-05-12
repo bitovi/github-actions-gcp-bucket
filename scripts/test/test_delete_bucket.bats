@@ -3,15 +3,13 @@
 
 bats_require_minimum_version 1.5.0
 
-source ./bucket_helpers.sh
+source ../bucket_helpers.sh
 
 @test "deletes the specified bucket" {
   # Create a bucket for testing
-  TEST_BUCKET="test-delete-bucket-$(date +%s)"
+  TEST_BUCKET="test-delete-bucket-$RANDOM"
+  
   create_bucket $TEST_BUCKET
-
-  # Wait for the bucket creation process to complete
-  sleep 5
 
   # Delete the created bucket
   delete_buckets $TEST_BUCKET

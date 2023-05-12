@@ -4,6 +4,10 @@ on:
     paths:
       - 'scripts/**'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   Bats-Test:
     runs-on: 'ubuntu-latest'
@@ -27,12 +31,13 @@ jobs:
         run: npm install -g bats
 
       - name: Run The Tests
-        run: cd scripts && bats . --timing --report-formatter junit && cp report.xml ../
+        run: cd scripts/test && bats . --timing --report-formatter junit && cp report.xml ../../
 
       - name: Test Report
         uses: dorny/test-reporter@v1
-        if: success() || failure()    # run this step even if previous step failed
+        # run this step even if previous step failed
+        if: success() || failure()
         with:
-          name: JUNIT Tests            # Name of the check run which will be created
-          path: report.xml  # Path to test results
-          reporter: java-junit        # Format of test results
+          name: JUNIT Tests     # Name of the check run which will be created
+          path: report.xml      # Path to test results
+          reporter: java-junit  # Format of test results

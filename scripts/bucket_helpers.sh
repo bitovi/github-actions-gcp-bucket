@@ -41,14 +41,18 @@ function upload_files() {
   #TODO: support lists of files
   local bucket_name=$1
   local files=$2
-  local no_clobber=$3
+  local no_clobber=${3:-'false'}
 
-  local command="gcloud storage cp $files gs://$bucket_name"
+  # local command="gcloud storage cp $files gs://$bucket_name"
+  local command_head="gsutil cp"
+  local command_tail="$files gs://$bucket_name"
 
   # going with string comparison here as booleans are not well-defined in both Actions and bash
   if [[ $no_clobber == 'true' ]]; then
-    command="$command --no-clobber"
+    command_head="$command_head -n"
   fi
+
+  local command="$command_head $command_tail"
 
   eval "$command"
 }
