@@ -35,6 +35,8 @@ graph TD
     Summary_failed-->End
 ```
 
+# Usage
+
 ## Configuration
 
 You must set three environment variables/secrets:
@@ -43,11 +45,21 @@ You must set three environment variables/secrets:
 - `BUCKET_NAME`: set as a `variable`, or set statically in your workflow file.
 - `FILE_NAME`: set as a `variable`, or set statically in your workflow file. Supports wildcards.
 
-To install this Action, ceate new workflow files in your repos's `.github/workflows` folder:
+### Optional Parameters
+
+|Param|Description|Default|Options|Required|
+|-|-|-|-|-|
+|`no_clobber`|Prevent overwriting the content of existing files|`false`|`false`, `true`|no|
+|`bucket_destroy`|Destroys the bucket and all of its contents.|`false`|`false`, `true`|no|
+
+## Installation
+
+To install this Action, create new workflow files in your repos's `.github/workflows` folder:
 
 ### Create and Upload (overwrite)
 
 `.github/workflows/deploy.yaml`
+
 ```yaml
 name: GCP Bucket Deploy
 on: workflow_dispatch       # set the triggers to your liking
@@ -67,9 +79,11 @@ jobs:
 ```
 
 ### Create and Upload (No Clobber)
+
 Add the `no_clobber` input to prevent overwriting of existing files. Files that are skipped will be printed to the log and Summary.
 
 `.github/workflows/deploy.yaml`
+
 ```yaml
 name: GCP Bucket Deploy
 on: workflow_dispatch       # set the triggers to your liking
@@ -117,17 +131,11 @@ jobs:
 
 The Action will output the URL to the publicly accessable file.
 
-# Usage
+# Execution
 
-## Optional Parameters
+You can use the two examples above to create and destroy your bucket. The triggers are described below.
 
-|Param|Description|Default|Options|Required|
-|-|-|-|-|-|
-|`no_clobber`|Prevent overwriting the content of existing files|`false`|`false`, `true`|no|
-
-### Manual Operation
-
-You can use the two examples above to create and destroy your bucket on demand.
+## Manual Operation
 
 Create two separate workflow files in `.github/workflows` and leave the trigger set to `workflow_dispatch`.
 
@@ -135,7 +143,7 @@ Run the action when desired by going to the Actions tab in your repo and running
 
 > Note: the path `.github/workflows` is specific and required for the Actions (workflows) to function.
 
-### Automated/GitOps
+## Automated/GitOps
 
 GitHub Actions really shine when they are automatically triggered by other events in the repository.
 
@@ -150,9 +158,9 @@ on:
 
 So your push to `main` will trigger the deploy. If you want to destroy the bucket, update the workflow file per the `destroy` example above, and commit it in. This will trigger the workflow, resulting in the bucket (and all its files) being destroyed.
 
-This is sometimes referred to as "GitOps", because the actions in GitHub are defining the state of your infrastructure.
+This is sometimes referred to as ***GitOps***, because the actions taken in GitHub are defining the state of your infrastructure; they are the "Source of truth" of your actual deployments.
 
-## To Do
+# To Do
 
 1. enable Google OIDC auth
 1. support folders

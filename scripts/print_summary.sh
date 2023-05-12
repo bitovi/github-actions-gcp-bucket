@@ -8,7 +8,7 @@ case $DEPLOY_STATUS in
 
   SKIPPED)
     echo "### $DEPLOY_RESULT_CONTENT " >> $GITHUB_STEP_SUMMARY
-  ;;
+    ;;
 
   DESTROYED)
     echo "### Your bucket '$BUCKET_NAME' was _destroyed_! :bomb:" >> $GITHUB_STEP_SUMMARY
