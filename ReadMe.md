@@ -9,7 +9,7 @@ This Action will upload files from your repo directly into a Google Storage Buck
 Don't upload anything you don't want exposed publicly.
 
 A future enhancement will support setting privacy options on your files.
-
+![alt](https://bitovi-gha-pixel-tracker-deployment-main.bitovi-sandbox.com/pixel/ucQ8yrqvFpr4va86ngodT)
 # Need help or have questions?
 
 This project is supported by [Bitovi, a DevOps Consultancy](https://www.bitovi.com/devops-consulting) and a proud supporter of Open Source software.
