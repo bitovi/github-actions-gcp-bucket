@@ -6,7 +6,7 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: true no i
 
 jobs:
   Bats-Test:
@@ -16,7 +16,7 @@ jobs:
       id-token: write
       contents: read
       checks: write
-
+[![Unit Test](https://github.com/bitovi/github-actions-gcp-bucket/actions/workflows/bats_test.yaml/badge.svg?event=check_run)](https://github.com/bitovi/github-actions-gcp-bucket/actions/workflows/bats_test.yaml)
     steps:
       - uses: actions/checkout@v3
         name: Checkout
