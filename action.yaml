@@ -50,10 +50,10 @@ runs:
   steps:
     - name: 'Checkout if required'
       if: ${{ inputs.checkout == 'true' }}
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: 'Authenticate to Google Cloud'
-      uses: google-github-actions/auth@v1
+      uses: google-github-actions/auth@v2
       with:
         credentials_json: ${{ inputs.gcp_access_key }}
 
